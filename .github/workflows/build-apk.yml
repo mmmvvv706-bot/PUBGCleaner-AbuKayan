@@ -36,6 +36,15 @@ jobs:
         run: |
           unzip -q PUBGCleaner-AbuKayan-V2-source-1.zip -d extracted
 
+      - name: Fix AIDL
+        run: |
+          cd extracted/PUBGCleaner-AbuKayan-V2
+
+          sed -i \
+            -e 's/scanTargets();/scanTargets() = 1;/' \
+            -e 's/deleteTarget(String absolutePath);/deleteTarget(String absolutePath) = 2;/' \
+            app/src/main/aidl/com/abukayan/pubgcleaner/IPaksCleaner.aidl
+
       - name: Build APK
         run: |
           cd extracted/PUBGCleaner-AbuKayan-V2
@@ -46,3 +55,4 @@ jobs:
         with:
           name: PUBGCleaner-AbuKayan-V2
           path: extracted/PUBGCleaner-AbuKayan-V2/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
